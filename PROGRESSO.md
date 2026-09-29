@@ -6,7 +6,7 @@
 **Título:** EMPREENDEDORISMO: Formalização do Processo de Criação e Gestão da Empresa Darwin
 **Documento oficial:** `Projeto para Avaliação_Empreendedorismo_CDADOS_DARWIN.doc` (o arquivo `..._MODELO.doc` é o modelo original da professora, não editar)
 **Repositório:** https://github.com/DataScience-Fatec-Projects/RHL007-Empreendedorismo_e_Transformacao_Digital (decisões e pendências em aberto ficam nas issues)
-**Quadro de acompanhamento (GitHub Project):** https://github.com/orgs/DataScience-Fatec-Projects/projects/2 – visão Kanban por Status: coluna "Pronto para fazer" = o que bloqueia a entrega do Capítulo 2; coluna "A refinar" = demais issues, a detalhar (responsável, escopo, prazo); campos Categoria e Prioridade em cada cartão
+**Quadro de acompanhamento (GitHub Project):** https://github.com/orgs/DataScience-Fatec-Projects/projects/2 – visão Kanban por Status: coluna "Pronto para fazer" = o que bloqueia a entrega de 30/09 (revisão dos Capítulos 1 e 2); coluna "A refinar" = demais issues, a detalhar (responsável, escopo, prazo); campos Categoria e Prioridade em cada cartão
 
 ---
 
@@ -85,6 +85,9 @@ powershell -ExecutionPolicy Bypass -File ferramentas\inserir_capitulo_word.ps1 -
 O script faz backup automático em `backup/`, apaga o conteúdo entre o título do capítulo e o título do capítulo seguinte, insere o texto novo com os estilos do modelo (Título 1/2/3 com numeração automática, Normal, Legenda) e atualiza o Sumário. Feche o Word antes de rodar. Para os próximos capítulos, passar `-InicioTitulo` com um trecho do título do capítulo (em maiúsculas, sem acentos) e `-FimTitulo` com o início do título seguinte.
 
 ## 5. Próximos passos
+
+**Entrega 1 – 30/09/2026: Capítulos 1 e 2 revisados.** Decisões de preço, metas e escopo (issues #1, #2, #5) e responsáveis (#4) até 29/09; revisões (#6, #7) e conferência de referências (#12) até 30/09; gerar .doc/PDF e enviar. Milestone "Entrega 30/09 – Capítulos 1 e 2" no repositório.
+
 
 1. **Revisão em grupo dos Capítulos 1 e 2** – ler o .doc; validar preço dos planos, metas da PUV e os limites declarados em 2.3.
 2. **Introdução** – contextualização (Bloco 1), justificativa (ruptura/perdas), objetivo geral e específicos, estrutura do documento; usar a PUV como tese.
