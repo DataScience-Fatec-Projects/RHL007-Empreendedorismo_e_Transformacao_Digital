@@ -35,5 +35,5 @@
 ## O que precisamos do grupo agora
 
 - Ler os Capítulos 1 e 2 no .doc e apontar o que cortar, ajustar ou reforçar.
-- Validar os preços dos planos e as metas da PUV (são os compromissos que vamos defender na apresentação).
+- Validar os preços dos planos e as metas da PUV (são os compromissos registrados no documento; nesta entrega não há apresentação, só o texto).
 - Tarefas que dependem de pessoas: busca da marca "Darwin" no INPI; tentar obter da APAS o número de redes por faixa de lojas; achar a referência do CADE sobre Carrefour/BIG e um número oficial de tíquete médio.

@@ -86,7 +86,7 @@ O script faz backup automático em `backup/`, apaga o conteúdo entre o título 
 
 ## 5. Próximos passos
 
-**Entrega 1 – 30/09/2026: Capítulos 1 e 2 revisados.** Decisões de preço, metas e escopo (issues #1, #2, #5) e responsáveis (#4) até 29/09; revisões (#6, #7) e conferência de referências (#12) até 30/09; gerar .doc/PDF e enviar. Milestone "Entrega 30/09 – Capítulos 1 e 2" no repositório.
+**Entrega 1 – 30/09/2026: Capítulos 1 e 2 revisados. Somente o documento, sem apresentação oral.** Decisões de preço, metas e escopo (issues #1, #2, #5) e responsáveis (#4) até 29/09; revisões (#6, #7) e conferência de referências (#12) até 30/09; gerar .doc/PDF e enviar. Milestone "Entrega 30/09 – Capítulos 1 e 2" no repositório.
 
 
 1. **Revisão em grupo dos Capítulos 1 e 2** – ler o .doc; validar preço dos planos, metas da PUV e os limites declarados em 2.3.
