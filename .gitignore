@@ -1,0 +1,17 @@
+# Arquivos temporarios/bloqueio do Word
+~$*
+*.tmp
+
+# Copias de seguranca locais geradas pelo script
+backup/
+
+# Gerados automaticamente a partir do Markdown
+capitulos/*.json
+
+# Modelo original da professora (material didatico, nao redistribuir)
+*_MODELO.doc
+*(1).doc
+
+# Sistema
+Thumbs.db
+.DS_Store
