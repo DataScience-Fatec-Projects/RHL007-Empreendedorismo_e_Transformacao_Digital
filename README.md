@@ -58,5 +58,6 @@ Feche o Word antes de rodar. O script aceita `-Pasta` para apontar outra pasta e
 |---|---|
 | Capítulo 1 – Análise de Mercado (Quadros 1–7) | Rascunho v1 pronto |
 | Capítulo 2 – Produto e PUV (Quadros 8–11) | Rascunho v1 pronto |
+| **Entrega 1 – Capítulos 1 e 2 (somente documento, sem apresentação)** | **30/09/2026** |
 | Introdução | Próximo |
 | Capítulos 3, 4 e 5; Resumo, Abstract, listas e referências finais | Pendentes |
