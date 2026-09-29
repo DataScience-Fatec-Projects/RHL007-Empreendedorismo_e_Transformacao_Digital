@@ -30,7 +30,7 @@ O resumo das decisões do grupo está em [`resumo-para-o-grupo.md`](resumo-para-
 1. Cada capítulo é escrito em Markdown na pasta `capitulos/` (uma linha por parágrafo, tabelas em formato pipe, legendas `Quadro N – ...` e `Fonte: ...`).
 2. O texto é inserido no `.doc` pelo script, que faz backup, apaga o conteúdo antigo do capítulo, insere o novo com os estilos do modelo e atualiza o Sumário.
 3. Decisões e números ficam em `PROGRESSO.md`; qualquer mudança começa por lá.
-4. Pendências e decisões em aberto são tratadas como **issues** deste repositório. O que bloqueia a próxima entrega fica no quadro [Darwin – Entrega do Capítulo 2](https://github.com/orgs/DataScience-Fatec-Projects/projects/2).
+4. Pendências e decisões em aberto são tratadas como **issues** deste repositório. O quadro Kanban [Darwin – Entrega do Capítulo 2](https://github.com/orgs/DataScience-Fatec-Projects/projects/2) separa o que bloqueia a próxima entrega ("Pronto para fazer") do que ainda precisa de refinamento ("A refinar").
 
 ### Regerar um capítulo no Word (Windows, com Microsoft Word instalado)
 

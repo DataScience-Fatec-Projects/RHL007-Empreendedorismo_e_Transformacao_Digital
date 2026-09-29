@@ -6,7 +6,7 @@
 **Título:** EMPREENDEDORISMO: Formalização do Processo de Criação e Gestão da Empresa Darwin
 **Documento oficial:** `Projeto para Avaliação_Empreendedorismo_CDADOS_DARWIN.doc` (o arquivo `..._MODELO.doc` é o modelo original da professora, não editar)
 **Repositório:** https://github.com/DataScience-Fatec-Projects/RHL007-Empreendedorismo_e_Transformacao_Digital (decisões e pendências em aberto ficam nas issues)
-**Quadro de acompanhamento (GitHub Project):** https://github.com/orgs/DataScience-Fatec-Projects/projects/2 – só o que bloqueia a entrega do Capítulo 2, categorizado por tipo e prioridade
+**Quadro de acompanhamento (GitHub Project):** https://github.com/orgs/DataScience-Fatec-Projects/projects/2 – visão Kanban por Status: coluna "Pronto para fazer" = o que bloqueia a entrega do Capítulo 2; coluna "A refinar" = demais issues, a detalhar (responsável, escopo, prazo); campos Categoria e Prioridade em cada cartão
 
 ---
 
