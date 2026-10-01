@@ -50,9 +50,9 @@
 |---|---|---|
 | Capa e folha de rosto | ✅ Preenchidas (nomes, título Darwin, set/2026) | .doc |
 | Ficha catalográfica | ⏳ Pendente (nº de páginas só no final) | .doc |
-| Resumo / Abstract | ⏳ Pendente (escrever por último) | – |
+| Resumo / Abstract | ✅ Resumo breve inserido em 30/09 (um parágrafo + palavras-chave; linha de referência preenchida com o nº de folhas atual). ⏳ Abstract pendente (texto-guia do modelo ainda no .doc) | `capitulos/00-Resumo.md` |
 | Listas de ilustrações e tabelas | ⏳ Refazer no final (os Quadros são texto simples, sem campo SEQ) | .doc |
-| Introdução (executive summary) | ⏳ Próxima etapa – usar dados do cap. 1 e a PUV do cap. 2 | – |
+| Introdução (executive summary) | ✅ Inserida em 30/09 (contextualização, justificativa, objetivos, método e estrutura; ~2 páginas) | `capitulos/00-Introducao.md` |
 | **1 Análise de Mercado – Varejo** (Blocos 1–3, 1.1 a 1.5, Quadros 1–7) | ✅ Rascunho v1 inserido no .doc (13/09); citação BRASIL 2025 → 2025a ajustada em 28/09 | `capitulos/01-Analise-de-Mercado.md` |
 | **2 O produto de dados e sua proposta de valor** (2.1 ficha técnica, 2.2 PUV, 2.3 escopo e limitações, 2.4 ESG com 2.4.1–2.4.3, Quadros 8–11) | ✅ **Rascunho v1 inserido no .doc (28/09)** – revisar em grupo | `capitulos/02-Produto-e-Proposta-de-Valor.md` |
 | 3 Operações, infraestrutura e MLOps (3.1 arquitetura e pipeline com diagrama, 3.2 infraestrutura, 3.3 equipe, 3.4 governança e qualidade, 3.5 capacidade e escalabilidade) | ⏳ Pendente – exige uma Figura (diagrama de arquitetura); o pipeline ainda não insere imagens | – |
@@ -66,11 +66,12 @@
 - `Projeto para Avaliação_Empreendedorismo_CDADOS_MODELO.doc` – modelo original da professora (referência do roteiro).
 - `PROGRESSO.md` – este arquivo (decisões, premissas, status, próximos passos).
 - `referencias.md` – referências já usadas, em formato ABNT, com URL e data de acesso.
-- `capitulos/01-Analise-de-Mercado.md` e `capitulos/02-Produto-e-Proposta-de-Valor.md` – texto-fonte dos capítulos (editar aqui e regerar o Word).
+- `capitulos/00-Introducao.md`, `capitulos/00-Resumo.md`, `capitulos/01-Analise-de-Mercado.md` e `capitulos/02-Produto-e-Proposta-de-Valor.md` – texto-fonte da Introdução, do Resumo e dos capítulos (editar aqui e regerar o Word).
 - `capitulos/01-blocos.json` e `capitulos/02-blocos.json` – gerados automaticamente a partir dos .md (não editar à mão).
 - `ferramentas/md_para_blocos.py` – converte um .md em blocos JSON.
 - `ferramentas/inserir_capitulo_word.ps1` – substitui um capítulo dentro do .doc pelos blocos e atualiza o Sumário.
 - `ferramentas/converter_legendas_seq.ps1` – converte legendas "Quadro N –" sem campo em legendas com SEQ e reconstrói a lista de quadros (uso pontual).
+- `ferramentas/atualizar_resumo.ps1` – aplica `capitulos/00-Resumo.md` nas páginas pré-textuais (referência, resumo e palavras-chave).
 - `backup/` – cópias do .doc antes de cada alteração automática.
 
 ### Como regerar um capítulo no Word após editar o .md
@@ -108,7 +109,10 @@ O script faz backup automático em `backup/`, apaga o conteúdo entre o título 
 - [ ] Cap. 3 precisará de uma Figura (diagrama de arquitetura): estender `inserir_capitulo_word.ps1` para inserir imagem PNG com legenda "Figura N – ...".
 - [x] Lista de quadros: em 30/09 as 11 legendas foram convertidas em legendas reais do Word (campo SEQ Quadro), a lista pré-textual passou a se chamar LISTA DE QUADROS e lista os Quadros 1–11 com páginas; o script de inserção já gera legendas com SEQ. A LISTA DE ILUSTRAÇÕES ficou com "Não há" até a figura do Capítulo 3 (depois, inserir legenda "Figura N –" com SEQ Figura e apontar a lista para esse rótulo).
 
+- [ ] No fechamento: remover da Introdução a frase final sobre "primeira entrega" (último parágrafo de `00-Introducao.md`), escrever o Abstract e rodar `atualizar_resumo.ps1` para atualizar o nº de folhas.
+
 ## 7. Histórico
 
 - **13/09/2026 – Sessão 1:** definições (nome, segmento, solução, modelo, nicho, SAM); pesquisa de mercado com ~40 fontes; Capítulo 1 escrito (Blocos 1–3, seções 1.1–1.5, Quadros 1–7) e inserido no .doc; criação de PROGRESSO.md, referencias.md e ferramentas de regeneração.
+- **30/09/2026 – Sessão 3:** legendas dos quadros convertidas em campos SEQ e LISTA DE QUADROS reconstruída; Introdução escrita e inserida; Resumo breve e palavras-chave inseridos; linha de referência preenchida; scripts `converter_legendas_seq.ps1` e `atualizar_resumo.ps1` criados.
 - **28/09/2026 – Sessão 2:** decisões de modelagem (gradient boosting), planos (3 faixas) e escopo do MVP; Capítulo 2 escrito (2.1 ficha técnica, 2.2 PUV, 2.3 escopo e limitações, 2.4 ESG com 2.4.1–2.4.3, Quadros 8–11) e inserido no .doc; 12 referências novas; ajuste da citação BRASIL 2025a no cap. 1; verificação do status do PL 2338.
