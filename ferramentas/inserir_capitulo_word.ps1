@@ -107,7 +107,19 @@ try {
       "pb" { Prep $wdStyleNormal; $sel.ParagraphFormat.FirstLineIndent = 0; $sel.ParagraphFormat.KeepWithNext = -1; $sel.Font.Bold = 1; $sel.TypeText([string]$b.text); $sel.Font.Bold = 0; $sel.TypeParagraph() }
       "p"  { Prep $wdStyleNormal; TypeInline $b.text; $sel.TypeParagraph() }
       "li" { Prep $wdStyleListBullet; TypeInline $b.text; $sel.TypeParagraph() }
-      "caption" { Prep $wdStyleCaption; $sel.ParagraphFormat.KeepWithNext = -1; $sel.TypeText([string]$b.text); $sel.TypeParagraph() }
+      "caption" {
+        # Legenda real do Word: "Quadro " + campo SEQ Quadro + " - titulo" (entra na lista de quadros)
+        Prep $wdStyleCaption; $sel.ParagraphFormat.KeepWithNext = -1
+        $txt = [string]$b.text
+        if ($txt -match '^Quadro \d+ (.+)$') {
+          $rest = $matches[1]
+          $sel.TypeText("Quadro ")
+          $fld = $d.Fields.Add($sel.Range, -1, 'SEQ Quadro \* ARABIC', $false)
+          $sel.SetRange($fld.Result.End + 1, $fld.Result.End + 1)
+          $sel.TypeText(" " + $rest)
+        } else { $sel.TypeText($txt) }
+        $sel.TypeParagraph()
+      }
       "source"  { Prep $wdStyleCaption; $sel.TypeText([string]$b.text); $sel.TypeParagraph() }
       "table" {
         Prep $wdStyleNormal
@@ -159,9 +171,10 @@ try {
   }
   "Titulos renumerados: $renum"
 
-  # Atualiza sumario(s) e campos
-  for ($k = 1; $k -le $d.TablesOfContents.Count; $k++) { $d.TablesOfContents.Item($k).Update() | Out-Null }
+  # Atualiza campos (numeracao SEQ), lista de quadros e sumario(s)
   try { $d.Fields.Update() | Out-Null } catch {}
+  for ($k = 1; $k -le $d.TablesOfFigures.Count; $k++) { try { $d.TablesOfFigures.Item($k).Update() | Out-Null } catch {} }
+  for ($k = 1; $k -le $d.TablesOfContents.Count; $k++) { $d.TablesOfContents.Item($k).Update() | Out-Null }
   $d.Save()
   "Salvo: $doc  (paginas: $($d.ComputeStatistics(2)))"
 } finally {

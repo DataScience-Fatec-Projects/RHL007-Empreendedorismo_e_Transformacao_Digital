@@ -70,6 +70,7 @@
 - `capitulos/01-blocos.json` e `capitulos/02-blocos.json` – gerados automaticamente a partir dos .md (não editar à mão).
 - `ferramentas/md_para_blocos.py` – converte um .md em blocos JSON.
 - `ferramentas/inserir_capitulo_word.ps1` – substitui um capítulo dentro do .doc pelos blocos e atualiza o Sumário.
+- `ferramentas/converter_legendas_seq.ps1` – converte legendas "Quadro N –" sem campo em legendas com SEQ e reconstrói a lista de quadros (uso pontual).
 - `backup/` – cópias do .doc antes de cada alteração automática.
 
 ### Como regerar um capítulo no Word após editar o .md
@@ -105,7 +106,7 @@ O script faz backup automático em `backup/`, apaga o conteúdo entre o título 
 - [ ] Datas de publicação exatas dos artigos do Projeto Draft e do AgFeed sobre a Aravita (hoje marcadas como 2024 e 2025).
 - [ ] Confirmar a URL exata da Resolução CD/ANPD nº 15/2024 (comunicação de incidentes) em `referencias.md`; hoje aponta para a página geral de atos normativos da ANPD.
 - [ ] Cap. 3 precisará de uma Figura (diagrama de arquitetura): estender `inserir_capitulo_word.ps1` para inserir imagem PNG com legenda "Figura N – ...".
-- [ ] No fechamento: refazer Lista de Tabelas/Quadros e Lista de Ilustrações com campos SEQ do Word.
+- [x] Lista de quadros: em 30/09 as 11 legendas foram convertidas em legendas reais do Word (campo SEQ Quadro), a lista pré-textual passou a se chamar LISTA DE QUADROS e lista os Quadros 1–11 com páginas; o script de inserção já gera legendas com SEQ. A LISTA DE ILUSTRAÇÕES ficou com "Não há" até a figura do Capítulo 3 (depois, inserir legenda "Figura N –" com SEQ Figura e apontar a lista para esse rótulo).
 
 ## 7. Histórico
 
