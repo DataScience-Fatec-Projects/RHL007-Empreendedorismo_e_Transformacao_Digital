@@ -77,6 +77,11 @@
 ### Como regerar um capítulo no Word após editar o .md
 ```powershell
 cd "C:\General\fatec\Trabalho de Empreendedorismo"
+# Introdução
+python ferramentas\md_para_blocos.py capitulos\00-Introducao.md capitulos\00-blocos.json
+powershell -ExecutionPolicy Bypass -File ferramentas\inserir_capitulo_word.ps1 -Blocos "capitulos\00-blocos.json" -InicioTitulo "INTRODU" -FimTitulo "AN"
+# Resumo (referência + resumo + palavras-chave)
+powershell -ExecutionPolicy Bypass -File ferramentas\atualizar_resumo.ps1
 # Capítulo 1
 python ferramentas\md_para_blocos.py capitulos\01-Analise-de-Mercado.md capitulos\01-blocos.json
 powershell -ExecutionPolicy Bypass -File ferramentas\inserir_capitulo_word.ps1

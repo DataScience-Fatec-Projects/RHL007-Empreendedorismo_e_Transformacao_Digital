@@ -60,7 +60,8 @@ Feche o Word antes de rodar. O script aceita `-Pasta` para apontar outra pasta e
 
 | Parte | Status |
 |---|---|
-| Capítulo 1 – Análise de Mercado (Quadros 1–7) | Rascunho v1 pronto |
-| Capítulo 2 – Produto e PUV (Quadros 8–11) | Rascunho v1 pronto |
+| Introdução e Resumo | Prontos (30/09); Abstract pendente |
+| Capítulo 1 – Análise de Mercado (Quadros 1–7) | Rascunho v1 pronto; revisão do grupo até 30/09 |
+| Capítulo 2 – Produto e PUV (Quadros 8–11) | Rascunho v1 pronto; revisão do grupo até 30/09 |
 | **Entrega 1 – Capítulos 1 e 2 (somente documento, sem apresentação)** | **30/09/2026** |
-| Capítulos 3, 4 e 5; Resumo, Abstract, listas e referências finais | Pendentes |
+| Capítulos 3, 4 e 5; Abstract, listas e referências finais | Pendentes |
