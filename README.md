@@ -2,7 +2,7 @@
 
 Trabalho da disciplina **Empreendedorismo** (3º semestre, CST em Ciência de Dados, FATEC Jundiaí "Deputado Ary Fossen"), orientado pela Profª. Ma. Jucelaine Lopes de Oliveira.
 
-**Título:** EMPREENDEDORISMO: Formalização do Processo de Criação e Gestão da Empresa Darwin
+**Título:** DARWIN: plataforma de previsão de demanda para supermercados regionais
 
 **Grupo:** Andressa Santos Silva · Jean Pablo de Souza de França · Rafael Soares de Albuquerque · Wellington Júnior Torres de Melo
 
@@ -24,9 +24,17 @@ O resumo das decisões do grupo está em [`resumo-para-o-grupo.md`](resumo-para-
 | `capitulos/00-Resumo.md` | Texto-fonte do Resumo (referência, resumo e palavras-chave) |
 | `capitulos/01-Analise-de-Mercado.md` | Texto-fonte do Capítulo 1 |
 | `capitulos/02-Produto-e-Proposta-de-Valor.md` | Texto-fonte do Capítulo 2 |
-| `ferramentas/md_para_blocos.py` | Converte um capítulo em Markdown para blocos JSON |
-| `ferramentas/inserir_capitulo_word.ps1` | Substitui um capítulo dentro do `.doc` pelos blocos, mantendo estilos, numeração, legendas com SEQ e Sumário |
-| `ferramentas/atualizar_resumo.ps1` | Aplica o Resumo e a linha de referência nas páginas pré-textuais |
+| `capitulos/03-Operacoes-Infraestrutura-MLOps.md` | Texto-fonte do Capítulo 3 |
+| `capitulos/04-Distribuicao-Vendas-Carteira.md` | Texto-fonte do Capítulo 4 |
+| `capitulos/05-Consideracoes-Finais.md` | Texto-fonte do Capítulo 5 |
+| `capitulos/00-Abstract.md` | Texto-fonte do Abstract |
+| `capitulos/figuras/` | Figuras do Capítulo 3 (geradas por `ferramentas/gerar_figuras.py`) |
+| `projeto_devolvido_p1/` | Versão da P1 comentada pela professora (comentários em vermelho); mantida só localmente, fora do repositório público |
+| `ferramentas/md_para_blocos.py` | Converte um capítulo (ou, com `--referencias`, o `referencias.md`) em blocos JSON |
+| `ferramentas/inserir_capitulo_word.ps1` | Substitui um capítulo dentro do `.doc` pelos blocos, mantendo estilos, numeração, legendas com SEQ (Quadro e Figura), imagens e Sumário |
+| `ferramentas/atualizar_resumo.ps1` | Aplica o Resumo (ou o Abstract) e a linha de referência nas páginas pré-textuais |
+| `ferramentas/ajustar_pretextuais.ps1` | Título da capa e folha de rosto, recuo da natureza do trabalho e Lista de Ilustrações |
+| `ferramentas/gerar_figuras.py` | Gera o diagrama de arquitetura e o organograma (matplotlib) |
 | `ferramentas/converter_legendas_seq.ps1` | Converte legendas sem campo em legendas com SEQ e refaz a lista de quadros |
 
 ## Como trabalhamos
@@ -48,7 +56,7 @@ python ferramentas\md_para_blocos.py capitulos\02-Produto-e-Proposta-de-Valor.md
 powershell -ExecutionPolicy Bypass -File ferramentas\inserir_capitulo_word.ps1 -Blocos "capitulos\02-blocos.json" -InicioTitulo "O PRODUTO DE DADOS" -FimTitulo "OPERA"
 ```
 
-Feche o Word antes de rodar. O script aceita `-Pasta` para apontar outra pasta e `-PadraoDoc` para outro nome de arquivo.
+Feche o Word antes de rodar. O script aceita `-Pasta` (padrão: a raiz do repositório) e `-PadraoDoc` para outro nome de arquivo. A sequência completa, incluindo os Capítulos 3 a 5, as Referências, os pré-textuais e o Abstract, está na seção 4 do [`PROGRESSO.md`](PROGRESSO.md).
 
 ## Regras de edição
 
@@ -60,8 +68,10 @@ Feche o Word antes de rodar. O script aceita `-Pasta` para apontar outra pasta e
 
 | Parte | Status |
 |---|---|
-| Introdução e Resumo | Prontos (30/09); Abstract pendente |
-| Capítulo 1 – Análise de Mercado (Quadros 1–7) | Rascunho v1 pronto; revisão do grupo até 30/09 |
-| Capítulo 2 – Produto e PUV (Quadros 8–11) | Rascunho v1 pronto; revisão do grupo até 30/09 |
-| **Entrega 1 – Capítulos 1 e 2 (somente documento, sem apresentação)** | **30/09/2026** |
-| Capítulos 3, 4 e 5; Abstract, listas e referências finais | Pendentes |
+| **Entrega 1 – Capítulos 1 e 2 (somente documento, sem apresentação)** | Entregue em 30/09/2026; devolvida com comentários (`projeto_devolvido_p1/`) |
+| Correções da P1 (pré-textuais, Introdução, Caps. 1 e 2, Referências) | Aplicadas em 15/11/2026 |
+| Resumo e Abstract | Prontos (15/11) |
+| Capítulo 3 – Operações, infraestrutura e MLOps (Figuras 1–2, Quadros 12–17) | Rascunho v1 inserido (15/11); revisão do grupo |
+| Capítulo 4 – Distribuição, vendas e carteira (Quadros 18–23) | Rascunho v1 inserido (15/11); revisão do grupo |
+| Capítulo 5 – Considerações finais (Quadro 24) | Rascunho v1 inserido (15/11); revisão do grupo |
+| Documento | 83 folhas; listas, Sumário e referências atualizados |

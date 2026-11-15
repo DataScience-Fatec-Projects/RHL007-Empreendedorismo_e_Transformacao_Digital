@@ -6,12 +6,17 @@ Regras do Markdown aceito (uma linha por parágrafo):
   **Texto**  (linha inteira em negrito) -> parágrafo em negrito (títulos de bloco)
   - item     -> marcador
   Quadro N – título  -> legenda de quadro (linha acima da tabela)
+  Figura N – título  -> legenda de figura (linha acima da imagem)
+  ![descrição](caminho.png) -> imagem (caminho relativo à pasta do repositório)
   | a | b |  -> tabela (a linha |---|---| é ignorada)
-  Fonte: ... -> fonte do quadro
+  Fonte: ... -> fonte do quadro ou da figura
   # ...      -> comentário (ignorado)
   demais linhas -> parágrafo normal; **negrito** inline é preservado
 
 Uso: python md_para_blocos.py entrada.md saida.json
+     python md_para_blocos.py --referencias referencias.md saida.json
+       (modo referências: cada parágrafo antes da linha "---" vira uma referência ABNT,
+        precedida do título "REFERÊNCIAS"; o cabeçalho "# ..." e a nota inicial são ignorados)
 """
 import json
 import re
@@ -41,8 +46,10 @@ def main(src, dst):
             blocks.append({"t": "h2", "text": s[4:].strip()})
         elif s.startswith("## "):
             blocks.append({"t": "h1", "text": s[3:].strip()})
-        elif re.match(r"^Quadro \d+ [–-] ", s):
+        elif re.match(r"^(Quadro|Figura) \d+ [–-] ", s):
             blocks.append({"t": "caption", "text": s})
+        elif re.fullmatch(r"!\[[^\]]*\]\([^)]+\)", s):
+            blocks.append({"t": "img", "path": re.search(r"\(([^)]+)\)", s).group(1)})
         elif s.startswith("Fonte:"):
             blocks.append({"t": "source", "text": s})
         elif s.startswith("- "):
@@ -60,5 +67,22 @@ def main(src, dst):
     print(f"{len(blocks)} blocos gravados em {dst}: {kinds}")
 
 
+def referencias(src, dst):
+    """Gera blocos da seção REFERÊNCIAS a partir de referencias.md (parágrafos antes de '---')."""
+    texto = re.split(r"(?m)^---\s*$", open(src, encoding="utf-8").read())[0]
+    blocks = [{"t": "h1", "text": "REFERÊNCIAS"}]
+    for s in (l.strip() for l in texto.splitlines()):
+        # ignora cabeçalho, nota inicial e linhas sem cara de referência (precisam ter um ano)
+        if not s or s.startswith("#") or s.startswith("Ordem alfab") or not re.search(r"(19|20)\d\d", s):
+            continue
+        blocks.append({"t": "ref", "text": s})
+    with open(dst, "w", encoding="utf-8") as f:
+        json.dump(blocks, f, ensure_ascii=False, indent=1)
+    print(f"{len(blocks) - 1} referências gravadas em {dst}")
+
+
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    if sys.argv[1] == "--referencias":
+        referencias(sys.argv[2], sys.argv[3])
+    else:
+        main(sys.argv[1], sys.argv[2])
