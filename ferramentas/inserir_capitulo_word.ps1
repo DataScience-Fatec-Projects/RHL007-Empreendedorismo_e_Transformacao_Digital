@@ -11,13 +11,14 @@
  Uso: powershell -ExecutionPolicy Bypass -File ferramentas\inserir_capitulo_word.ps1 [-DigitarNumeros]
 #>
 param(
-  [string]$Pasta = "C:\General\fatec\Trabalho de Empreendedorismo",
+  [string]$Pasta = (Split-Path $PSScriptRoot -Parent),   # raiz do repositorio
   [string]$PadraoDoc = "*CDADOS_DARWIN.doc",
   [string]$Blocos = "capitulos\01-blocos.json",
   [string]$InicioTitulo = "LISE DE MERCADO",      # trecho (sem acento) do titulo do capitulo 1
-  [string]$FimTitulo = "O PRODUTO DE DADOS",       # inicio do titulo do capitulo 2 (comparado em maiusculas)
+  [string]$FimTitulo = "O PRODUTO DE DADOS",       # inicio do titulo do capitulo seguinte (maiusculas); "" = ate o fim do documento
   [switch]$DigitarNumeros,                         # use apenas se os estilos de titulo NAO tiverem numeracao automatica
-  [switch]$SemBackup
+  [switch]$SemBackup,
+  [switch]$SemNumeroTitulo                         # remove a numeracao do titulo (elementos pos-textuais, ex.: REFERENCIAS)
 )
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
@@ -57,14 +58,22 @@ try {
     if ($p.OutlineLevel -ne 1) { continue }
     $t = $p.Range.Text.Trim().ToUpperInvariant()
     if ($pStart -eq 0) { if ($t -like "*$InicioTitulo*") { $pStart = $i }; continue }
-    if ($t.StartsWith($FimTitulo)) { $pEnd = $i; break }
+    if ($FimTitulo -ne "" -and $t.StartsWith($FimTitulo)) { $pEnd = $i; break }
   }
-  if ($pStart -eq 0 -or $pEnd -eq 0) { throw "Nao achei os titulos (inicio=$pStart fim=$pEnd)" }
-  "Titulo do capitulo no paragrafo $pStart; proximo capitulo no paragrafo $pEnd"
+  if ($pStart -eq 0 -or ($pEnd -eq 0 -and $FimTitulo -ne "")) { throw "Nao achei os titulos (inicio=$pStart fim=$pEnd)" }
+  "Titulo do capitulo no paragrafo $pStart; proximo capitulo no paragrafo $pEnd (0 = fim do documento)"
 
-  # Apaga o conteudo antigo entre os dois titulos
+  # Padroniza o texto do titulo do capitulo com o do Markdown (sem o numero, que e automatico)
+  if (@($blocks)[0].t -eq "h1") {
+    $novo = ([string]@($blocks)[0].text -replace '^\d+(\.\d+)*\s+', '')
+    $pt = $d.Paragraphs.Item($pStart)
+    $d.Range($pt.Range.Start, $pt.Range.End - 1).Text = $novo
+  }
+  if ($SemNumeroTitulo) { $d.Paragraphs.Item($pStart).Range.ListFormat.RemoveNumbers() }
+
+  # Apaga o conteudo antigo entre os dois titulos (ou ate o fim do documento)
   $delStart = $d.Paragraphs.Item($pStart + 1).Range.Start
-  $delEnd   = $d.Paragraphs.Item($pEnd).Range.Start
+  if ($pEnd -gt 0) { $delEnd = $d.Paragraphs.Item($pEnd).Range.Start } else { $delEnd = $d.Content.End - 1 }
   if ($delEnd -gt $delStart) { $d.Range($delStart, $delEnd).Delete() | Out-Null }
   "Conteudo antigo removido ($($delEnd - $delStart) caracteres)"
 
@@ -108,19 +117,36 @@ try {
       "p"  { Prep $wdStyleNormal; TypeInline $b.text; $sel.TypeParagraph() }
       "li" { Prep $wdStyleListBullet; TypeInline $b.text; $sel.TypeParagraph() }
       "caption" {
-        # Legenda real do Word: "Quadro " + campo SEQ Quadro + " - titulo" (entra na lista de quadros)
+        # Legenda real do Word: "Quadro " (ou "Figura ") + campo SEQ + " - titulo" (entra na lista correspondente)
         Prep $wdStyleCaption; $sel.ParagraphFormat.KeepWithNext = -1
         $txt = [string]$b.text
-        if ($txt -match '^Quadro \d+ (.+)$') {
-          $rest = $matches[1]
-          $sel.TypeText("Quadro ")
-          $fld = $d.Fields.Add($sel.Range, -1, 'SEQ Quadro \* ARABIC', $false)
+        if ($txt -match '^(Quadro|Figura) \d+ (.+)$') {
+          $rotulo = $matches[1]; $rest = $matches[2]
+          $sel.TypeText("$rotulo ")
+          $fld = $d.Fields.Add($sel.Range, -1, "SEQ $rotulo \* ARABIC", $false)
           $sel.SetRange($fld.Result.End + 1, $fld.Result.End + 1)
           $sel.TypeText(" " + $rest)
         } else { $sel.TypeText($txt) }
         $sel.TypeParagraph()
       }
       "source"  { Prep $wdStyleCaption; $sel.TypeText([string]$b.text); $sel.TypeParagraph() }
+      "img" {
+        # Figura centralizada, limitada a largura util da pagina, presa a legenda acima e a fonte abaixo
+        Prep $wdStyleNormal
+        $sel.ParagraphFormat.FirstLineIndent = 0; $sel.ParagraphFormat.Alignment = 1; $sel.ParagraphFormat.KeepWithNext = -1
+        $img = Join-Path $Pasta ([string]$b.path)
+        $shp = $sel.InlineShapes.AddPicture($img, $false, $true)
+        $larg = $d.PageSetup.PageWidth - $d.PageSetup.LeftMargin - $d.PageSetup.RightMargin
+        if ($shp.Width -gt $larg) { $prop = $larg / $shp.Width; $shp.Width = $larg; $shp.Height = $shp.Height * $prop }
+        $sel.TypeParagraph()
+      }
+      "ref" {
+        # Referencia ABNT NBR 6023: alinhada a esquerda, espaco simples, sem recuo, uma linha em branco entre itens
+        Prep $wdStyleNormal
+        $sel.ParagraphFormat.FirstLineIndent = 0; $sel.ParagraphFormat.LeftIndent = 0; $sel.ParagraphFormat.Alignment = 0
+        $sel.ParagraphFormat.LineSpacingRule = 0; $sel.ParagraphFormat.SpaceBefore = 0; $sel.ParagraphFormat.SpaceAfter = 12
+        TypeInline $b.text; $sel.TypeParagraph()
+      }
       "table" {
         Prep $wdStyleNormal
         $rows = @($b.rows); $nr = $rows.Count; $nc = @($rows[0]).Count
@@ -151,13 +177,17 @@ try {
   }
 
   # Garante numeracao automatica (1.1, 1.2, 1.3.1...) nos titulos inseridos: copia o modelo de lista
-  # dos primeiros titulos numerados de nivel 2 e 3 que existirem nos capitulos seguintes.
-  $n = $d.Paragraphs.Count; $pEnd2 = 0
+  # dos primeiros titulos numerados de nivel 2 e 3 que existirem fora do capitulo inserido
+  # (primeiro nos capitulos seguintes; se faltar algum nivel, nos anteriores, a partir do inicio).
+  $n = $d.Paragraphs.Count; $pEnd2 = $n + 1
   for ($i = $pStart + 1; $i -le $n; $i++) { if ($d.Paragraphs.Item($i).OutlineLevel -eq 1) { $pEnd2 = $i; break } }
   $ref = @{}
-  for ($i = $pEnd2; $i -le $n -and $pEnd2 -gt 0; $i++) {
-    $p = $d.Paragraphs.Item($i); $ol = $p.OutlineLevel
-    if (($ol -eq 2 -or $ol -eq 3) -and -not $ref.ContainsKey($ol) -and $p.Range.ListFormat.ListString -ne "") { $ref[$ol] = $p }
+  foreach ($faixa in @(@($pEnd2, $n), @(1, ($pStart - 1)))) {
+    for ($i = $faixa[0]; $i -le $faixa[1]; $i++) {
+      $p = $d.Paragraphs.Item($i); $ol = $p.OutlineLevel
+      if (($ol -eq 2 -or $ol -eq 3) -and -not $ref.ContainsKey($ol) -and $p.Range.ListFormat.ListString -match '^\d') { $ref[$ol] = $p }
+      if ($ref.Count -eq 2) { break }
+    }
     if ($ref.Count -eq 2) { break }
   }
   $renum = 0

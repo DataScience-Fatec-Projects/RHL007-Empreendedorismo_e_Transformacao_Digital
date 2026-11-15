@@ -3,15 +3,17 @@
    bloco 1 -> paragrafo de referencia imediatamente acima do titulo RESUMO ({{FOLHAS}} = n. de paginas; **x** = negrito)
    bloco 2 -> primeiro paragrafo apos o titulo RESUMO (texto do resumo)
    bloco 3 -> paragrafo "Palavras-chave: ..." logo apos o resumo (criado se nao existir)
- O ABSTRACT nao e alterado. Faz backup antes. Pode ser executado varias vezes.
+ Faz backup antes. Pode ser executado varias vezes.
  Uso: powershell -ExecutionPolicy Bypass -File ferramentas\atualizar_resumo.ps1
+ Abstract: powershell -ExecutionPolicy Bypass -File ferramentas\atualizar_resumo.ps1 -Fonte capitulos\00-Abstract.md -TituloResumo ABSTRACT -RotuloChave Keywords
  (arquivo propositalmente sem acentos; PowerShell 5.1 le .ps1 sem BOM como ANSI)
 #>
 param(
-  [string]$Pasta = "C:\General\fatec\Trabalho de Empreendedorismo",
+  [string]$Pasta = (Split-Path $PSScriptRoot -Parent),   # raiz do repositorio
   [string]$PadraoDoc = "*CDADOS_DARWIN.doc",
   [string]$Fonte = "capitulos\00-Resumo.md",
-  [string]$TituloResumo = "RESUMO"
+  [string]$TituloResumo = "RESUMO",
+  [string]$RotuloChave = "Palavras-chave"
 )
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
@@ -60,7 +62,8 @@ try {
   $pRef = $d.Paragraphs.Item($iRef)
   Set-ParaText $d $pRef $refPlain
   $pRef = $d.Paragraphs.Item($iRef)
-  $pRef.Range.Font.Bold = 0
+  $pRef.Range.Font.Bold = 0; $pRef.Range.HighlightColorIndex = 0   # remove o marca-texto amarelo do modelo
+  $pRef.LineSpacingRule = 0
   if ($boldText -ne "") { $d.Range($pRef.Range.Start + $boldStart, $pRef.Range.Start + $boldStart + $boldText.Length).Font.Bold = 1 }
   "Referencia atualizada ($folhas f.)"
 
@@ -70,12 +73,14 @@ try {
   $pRes = $d.Paragraphs.Item($iRes)
   $pRes.Range.Font.Bold = 0; $pRes.Range.Font.Italic = 0
   $pRes.Alignment = 3; $pRes.FirstLineIndent = 0
+  # mesma formatacao no Resumo e no Abstract: corpo 12, espaco simples, sem marca-texto, em uma pagina
+  $pRes.Range.Font.Size = 12; $pRes.LineSpacingRule = 0; $pRes.Range.HighlightColorIndex = 0
   "Resumo atualizado ($($resumoTxt.Split(' ').Count) palavras)"
 
   # 3) palavras-chave: proximo paragrafo nao vazio; se nao for 'Palavras-chave', cria (linha em branco + paragrafo)
   $iNext = 0; for ($i = $iRes + 1; $i -le $d.Paragraphs.Count; $i++) { if ($d.Paragraphs.Item($i).Range.Text.Trim() -ne "") { $iNext = $i; break } }
   $pNext = $d.Paragraphs.Item($iNext)
-  if ($pNext.Range.Text.Trim().StartsWith("Palavras-chave")) {
+  if ($pNext.Range.Text.Trim().StartsWith($RotuloChave)) {
     Set-ParaText $d $pNext $kwTxt
     "Palavras-chave atualizadas"
   } else {
@@ -89,8 +94,12 @@ try {
     "Palavras-chave inseridas"
   }
   # negrito apenas no rotulo "Palavras-chave:"
-  $iKw = 0; for ($i = $iRes + 1; $i -le $d.Paragraphs.Count; $i++) { if ($d.Paragraphs.Item($i).Range.Text.Trim().StartsWith("Palavras-chave")) { $iKw = $i; break } }
-  if ($iKw -gt 0) { $pk = $d.Paragraphs.Item($iKw); $d.Range($pk.Range.Start, $pk.Range.Start + 15).Font.Bold = 1 }
+  $iKw = 0; for ($i = $iRes + 1; $i -le $d.Paragraphs.Count; $i++) { if ($d.Paragraphs.Item($i).Range.Text.Trim().StartsWith($RotuloChave)) { $iKw = $i; break } }
+  if ($iKw -gt 0) {
+    $pk = $d.Paragraphs.Item($iKw)
+    $pk.Range.Font.Bold = 0; $pk.Range.Font.Size = 12; $pk.LineSpacingRule = 0; $pk.Range.HighlightColorIndex = 0
+    $d.Range($pk.Range.Start, $pk.Range.Start + $RotuloChave.Length + 1).Font.Bold = 1
+  }
 
   try { $null = $d.Fields.Update() } catch {}
   for ($k = 1; $k -le $d.TablesOfContents.Count; $k++) { $null = $d.TablesOfContents.Item($k).Update() }
